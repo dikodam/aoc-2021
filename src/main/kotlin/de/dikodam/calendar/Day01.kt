@@ -21,9 +21,11 @@ class Day01 : AbstractDay() {
     }
 
     override fun task2(): String {
-        return input.asSequence()
+        return input
+//            .asSequence()
+// sequence may have better memory performance / produce less garbage, but takes 14ms instead of 3ms
             .windowed(3)
-            .map { (first, second, third) -> first + second + third }
+            .map(List<Int>::sum)
             .zipWithNext()
             .count { (first, second) -> second > first }
             .toString()
