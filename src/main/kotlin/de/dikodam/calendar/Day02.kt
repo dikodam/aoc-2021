@@ -14,7 +14,7 @@ class Day02 : AbstractDay() {
     val input = readInputStrings()
     override fun task1(): String {
         return input.map { parseInstructionTask1(it) }
-            .fold(Corrdinates2D(0, 0), Corrdinates2D::plus)
+            .fold(Coordinates2D(0, 0), Coordinates2D::plus)
             .let { (horizontal, depth) -> "${horizontal * depth}" }
     }
 
@@ -24,13 +24,13 @@ class Day02 : AbstractDay() {
             .run { "${horizontal * depth}" }
     }
 
-    private fun parseInstructionTask1(instructionLine: String): Corrdinates2D {
+    private fun parseInstructionTask1(instructionLine: String): Coordinates2D {
         val (direction, countString) = instructionLine.split(Regex(" "))
         val count = countString.toInt()
         return when (direction) {
-            "forward" -> Corrdinates2D(count, 0)
-            "up" -> Corrdinates2D(0, -count)
-            "down" -> Corrdinates2D(0, count)
+            "forward" -> Coordinates2D(count, 0)
+            "up" -> Coordinates2D(0, -count)
+            "down" -> Coordinates2D(0, count)
             else -> throw IllegalArgumentException("wtf: $instructionLine")
         }
     }
@@ -47,9 +47,9 @@ class Day02 : AbstractDay() {
     }
 }
 
-private data class Corrdinates2D(val x: Int, val y: Int) {
-    operator fun plus(other: Corrdinates2D) =
-        Corrdinates2D(x + other.x, y + other.y)
+private data class Coordinates2D(val x: Int, val y: Int) {
+    operator fun plus(other: Coordinates2D) =
+        Coordinates2D(x + other.x, y + other.y)
 }
 
 private enum class CommandType {
