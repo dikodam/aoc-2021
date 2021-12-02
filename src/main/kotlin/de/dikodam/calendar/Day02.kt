@@ -20,7 +20,7 @@ class Day02 : AbstractDay() {
 
     override fun task2(): String {
         return input.map { parseInstructionTask2(it) }
-            .fold(SubmarineState(0, 0, 0)) { state, command -> state.process(command) }
+            .fold(SubmarineState(0, 0, 0), SubmarineState::process)
             .run { "${horizontal * depth}" }
     }
 
