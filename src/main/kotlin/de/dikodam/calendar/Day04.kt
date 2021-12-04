@@ -1,6 +1,7 @@
 package de.dikodam.calendar
 
 import de.dikodam.AbstractDay
+import de.dikodam.executeTasks
 import kotlin.time.ExperimentalTime
 
 
@@ -11,7 +12,6 @@ fun main() {
 
 val lineBreak = "\r\n"
 
-@ExperimentalTime
 class Day04 : AbstractDay() {
 
     val rawInput = readInputRaw()

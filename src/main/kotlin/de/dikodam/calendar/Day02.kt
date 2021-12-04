@@ -2,6 +2,7 @@ package de.dikodam.calendar
 
 import de.dikodam.AbstractDay
 import de.dikodam.calendar.CommandType.*
+import de.dikodam.executeTasks
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -9,7 +10,6 @@ fun main() {
     Day02().executeTasks()
 }
 
-@ExperimentalTime
 class Day02 : AbstractDay() {
     val input = readInputStrings()
     override fun task1(): String {
