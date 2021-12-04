@@ -17,9 +17,9 @@ class Day04 : AbstractDay() {
     val rawInput = readInputRaw()
 
     override fun task1(): String {
-        val (bingoNumers, bingoBoards) = parseInput(rawInput)
+        val (bingoNumers: List<Int>, bingoBoards: List<BingoBoard>) = parseInput(rawInput)
         return bingoBoards.map { it.processUntilWin(bingoNumers) }
-            .minByOrNull { it.index }
+            .minByOrNull { winningState -> winningState.index }
             ?.score.toString()
     }
 
@@ -33,11 +33,9 @@ class Day04 : AbstractDay() {
     }
 
     override fun task2(): String {
-        val (bingoNumers, bingoBoards) = parseInput(rawInput)
-        val processedBingoBoards = bingoBoards.map { it.processUntilWin(bingoNumers) }
-        val lastWinningBoard = processedBingoBoards
-            .maxByOrNull { it.index }
-        return lastWinningBoard
+        val (bingoNumers: List<Int>, bingoBoards: List<BingoBoard>) = parseInput(rawInput)
+        return bingoBoards.map { it.processUntilWin(bingoNumers) }
+            .maxByOrNull { winningState -> winningState.index }
             ?.score.toString()
     }
 }
@@ -52,14 +50,11 @@ class BingoBoard(val bingoCells: List<BingoCell>) {
 
     companion object {
         fun from(rawString: String): BingoBoard {
-            val intLines = rawString.split(lineBreak)
-                .map { line ->
-                    line
-                        .split(" ")
-                        .filterNot { it.isEmpty() }
-                        .map { it.toInt() }
-                }
-            val bingoCells = intLines.flatten().map { BingoCell(it) }
+            val bingoCells = rawString.replace(lineBreak, " ")
+                .split(" ")
+                .filter { it.isNotBlank() }
+                .map { it.toInt() }
+                .map { BingoCell(it) }
             return BingoBoard(bingoCells)
         }
     }
@@ -92,7 +87,7 @@ class BingoBoard(val bingoCells: List<BingoCell>) {
             processNumber(number)
             if (boardIsWinning()) {
                 val score = number * bingoCells.filterNot { it.marked }.sumOf { it.number }
-                return WinningState(index, number, score)
+                return WinningState(index, score)
             }
         }
         error("something went wrong, processed all numbers but board didnt win")
@@ -103,4 +98,4 @@ class BingoBoard(val bingoCells: List<BingoCell>) {
     }
 }
 
-data class WinningState(val index: Int, val calledNumber: Int, val score: Int)
+data class WinningState(val index: Int, val score: Int)
