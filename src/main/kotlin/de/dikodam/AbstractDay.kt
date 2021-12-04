@@ -20,9 +20,17 @@ abstract class AbstractDay {
     abstract fun task1(): String
     abstract fun task2(): String
 
-    fun readInputStrings(): List<String> {
+    private fun findDayFile(): File {
         val day = this::class.simpleName
-        return File("src/main/resources/$day.txt").readLines()
+        return File("src/main/resources/$day.txt")
+    }
+
+    fun readInputRaw(): String {
+        return findDayFile().readText()
+    }
+
+    fun readInputStrings(): List<String> {
+        return findDayFile().readLines()
     }
 
     fun readInputInts(): List<Int> {
