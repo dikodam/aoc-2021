@@ -10,7 +10,7 @@ fun main() {
     Day04().executeTasks()
 }
 
-val lineBreak = "\r\n"
+private const val lineBreak = "\r\n"
 
 class Day04 : AbstractDay() {
 
