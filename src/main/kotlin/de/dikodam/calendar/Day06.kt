@@ -62,8 +62,9 @@ class Day06 : AbstractDay() {
         // maybe use a List<Pair<Int,Int>> for 'easier' shifting?
 
         repeat(256) {
-            // implement shifting
-            // index 0 * 2 goes to index 8
+            // implement index shift by -1
+            // index 0 goes to index 6 AND another copy to index 8
+            // index 6 is sum of index 0 and index 7
         }
 
         return ""
