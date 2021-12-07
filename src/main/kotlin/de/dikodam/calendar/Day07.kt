@@ -12,37 +12,28 @@ fun main() {
 
 class Day07 : AbstractDay() {
     val input = readInputRaw().split(",").map(String::toInt)
+    val min = input.minOf { it }
+    val max = input.maxOf { it }
     override fun task1(): String {
-        val min = input.minOf { it }
-        val max = input.maxOf { it }
-
-        var fuelConsumption = Int.MAX_VALUE
-        for (m in min..max) {
-            val newFuelConsm = input.sumOf { (it - m).absoluteValue }
-            if (newFuelConsm < fuelConsumption) {
-                fuelConsumption = newFuelConsm
-            }
-        }
-
-        return fuelConsumption.toString()
+        return (min..max)
+            .map { m -> input.sumOf { (it - m).absoluteValue } }
+            .minOf { it }
+            .toString()
     }
 
     override fun task2(): String {
-        val min = input.minOf { it }
-        val max = input.maxOf { it }
-
-        var fuelConsumption = Int.MAX_VALUE
-        for (m in min..max) {
-            val newFuelConsm = input
-                .map { (it - m).absoluteValue }
-                .map { distance -> (0..distance).sumOf { it } }
-                .sumOf { it }
-            if (newFuelConsm < fuelConsumption) {
-                fuelConsumption = newFuelConsm
+        return (min..max)
+            .map { m ->
+                input
+                    .map { (it - m).absoluteValue }
+                    .map { sumUpTo(it) }
+                    .sumOf { it }
             }
-        }
-
-        return fuelConsumption.toString()
+            .minOf { it }
+            .toString()
     }
-
 }
+
+fun sumUpTo(x: Int) =
+    (x * (x + 1)) / 2 // little gauss
+//    (0..x).sumOf { it }
