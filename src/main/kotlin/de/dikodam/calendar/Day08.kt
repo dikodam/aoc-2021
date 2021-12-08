@@ -111,11 +111,7 @@ fun String.decode(): Int {
 
     // c only doesn't appear in 5 (size 5) and 6 (size 6)
     val pattern5: String = patternsByLength[5]!!.first { !it.contains(signalC) }
-    val pattern6: String = try {
-        patternsByLength[6]!!.first { !it.contains(signalC) }
-    } catch (e: NoSuchElementException) {
-        throw e
-    }
+    val pattern6: String = patternsByLength[6]!!.first { !it.contains(signalC) }
     patternToDigit[pattern5] = 5
     patternToDigit[pattern6] = 6
 
