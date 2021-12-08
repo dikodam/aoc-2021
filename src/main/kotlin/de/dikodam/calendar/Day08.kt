@@ -2,6 +2,7 @@ package de.dikodam.calendar
 
 import de.dikodam.AbstractDay
 import de.dikodam.executeTasks
+import java.util.NoSuchElementException
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -9,11 +10,9 @@ fun main() {
     Day08().executeTasks()
 }
 
-
 class Day08 : AbstractDay() {
     val input = readInputStrings()
     override fun task1(): String {
-        val easyMappings = mapOf(2 to 1, 4 to 4, 3 to 7, 7 to 8)
         val uniqueSizes = listOf(2, 4, 3, 7)
         val sumOfEasyDigitsInOutput = input.map { it.split(" | ")[1] }
             .map {
@@ -25,8 +24,9 @@ class Day08 : AbstractDay() {
     }
 
     override fun task2(): String {
-
-        return ""
+        return input.map { it.decode() }
+            .sumOf { it }
+            .toString()
     }
 }
 
@@ -74,7 +74,7 @@ class Day08 : AbstractDay() {
 // 0 has unique e, 9 has unique d (intersection: a,b,c,f,g)
 // e is identifiable, therefore 0 is, the remaining pattern is 9
 
-fun String.decode(): List<Int> {
+fun String.decode(): Int {
     val (patterns, solutionDigitpatterns) = this.split(" | ").map { it.split(" ") }
     val patternsByLength: Map<Int, List<String>> = patterns.groupBy { it.length }
     val signalCounts: Map<Char, Int> = countSignalsInPatterns(patterns)
@@ -94,13 +94,17 @@ fun String.decode(): List<Int> {
     val signalA = identifySignalA(pattern7, signalC, signalF)
 
     // c only doesn't appear in 5 (size 5) and 6 (size 6)
-    val pattern5 = patterns.filterNot { signalC in it }.first { it.length == 5 }
-    val pattern6 = patterns.filterNot { signalC in it }.first { it.length == 6 }
+    val pattern5: String = patternsByLength[5]!!.first { !it.contains(signalC) }
+    val pattern6: String = try {
+        patternsByLength[6]!!.first { !it.contains(signalC) }
+    } catch (e: NoSuchElementException) {
+        throw e
+    }
     patternToDigit[pattern5] = 5
     patternToDigit[pattern6] = 6
 
     // only 2 doesn't have f
-    val pattern2 = patterns.filterNot { signalF in it }.first()
+    val pattern2 = patterns.filterNot { it.contains(signalF) }.first()
     patternToDigit[pattern2] = 2
 
     // at this point, the remaining 5-sized digit is 3
@@ -113,14 +117,22 @@ fun String.decode(): List<Int> {
 
     val patterns0And9 = patterns.filter { it.length == 6 }.filter { it != pattern6 }
     val (signalE, _) = signalCounts.asSequence().first { (_, count) -> count == 4 }
-    val pattern0 = patterns0And9.first{ signalE in it }
-    val pattern9 = patterns0And9.first { signalE !in it }
+    val pattern0 = patterns0And9.first { it.contains(signalE) }
+    val pattern9 = patterns0And9.first { !it.contains(signalE) }
     patternToDigit[pattern0] = 0
     patternToDigit[pattern9] = 9
 
+    return solutionDigitpatterns
+        .map { pattern -> matchDigit(patternToDigit, pattern) }
+        .joinToString(separator = "")
+        .toInt()
+}
 
-
-    return emptyList()
+fun matchDigit(patternToDigit: Map<String, Int>, pattern: String): String {
+    val (_, digit) = patternToDigit.asSequence()
+        .filter { (key, _) -> pattern.all { patternChar -> key.contains(patternChar) } }
+        .first()
+    return digit.toString()
 }
 
 fun identifySignalA(pattern7: String, c: Char, f: Char): Char {
@@ -128,9 +140,12 @@ fun identifySignalA(pattern7: String, c: Char, f: Char): Char {
 }
 
 fun identifySignalCandF(pattern1: String, signalCounts: Map<Char, Int>): Pair<Char, Char> {
+    // c has signalCount of 8
+    // f has signalCount of 9
     val (c, _) = signalCounts.asSequence()
-        .first { (_, count) -> count == 9 }
-    val f = pattern1.toList().first { it != c }
+        .first { (char, count) -> pattern1.contains(char) && count == 8 }
+    val (f, _) = signalCounts.asSequence()
+        .first { (char, count) -> pattern1.contains(char) && count == 9 }
     return c to f
 }
 
