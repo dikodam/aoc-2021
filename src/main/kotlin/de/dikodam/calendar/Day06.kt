@@ -50,24 +50,30 @@ class Day06 : AbstractDay() {
 
     override fun task2(): String {
         val fishCounter = mutableMapOf<Int, Long>()
-//        readInputRaw()
-                "3,4,3,1,2"
+        readInputRaw()
+            //"3,4,3,1,2"
             .split(",")
             .map { it.toInt() }
             .groupBy { it }
             .mapValuesTo(fishCounter) { (_, fishList) -> fishList.size.toLong() }
 
-        println(fishCounter)
-
-        // maybe use a List<Pair<Int,Int>> for 'easier' shifting?
-
         repeat(256) {
-            // implement index shift by -1
+            // index shift by -1
             // index 0 goes to index 6 AND another copy to index 8
             // index 6 is sum of index 0 and index 7
+            var buffer = fishCounter[0] ?: 0L
+            fishCounter[0] = fishCounter[1] ?: 0L
+            fishCounter[1] = fishCounter[2] ?: 0L
+            fishCounter[2] = fishCounter[3] ?: 0L
+            fishCounter[3] = fishCounter[4] ?: 0L
+            fishCounter[4] = fishCounter[5] ?: 0L
+            fishCounter[5] = fishCounter[6] ?: 0L
+            fishCounter[6] = (fishCounter[7] ?: 0L) + (buffer)
+            fishCounter[7] = fishCounter[8] ?: 0L
+            fishCounter[8] = buffer
         }
 
-        return ""
+        return fishCounter.values.sum().toString()
     }
 
 
