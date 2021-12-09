@@ -1,6 +1,7 @@
 package de.dikodam.calendar
 
 import de.dikodam.AbstractDay
+import de.dikodam.Coordinates2D
 import de.dikodam.calendar.CommandType.*
 import de.dikodam.executeTasks
 import kotlin.time.ExperimentalTime
@@ -47,10 +48,6 @@ class Day02 : AbstractDay() {
     }
 }
 
-private data class Coordinates2D(val x: Int, val y: Int) {
-    operator fun plus(other: Coordinates2D) =
-        Coordinates2D(x + other.x, y + other.y)
-}
 
 private enum class CommandType {
     DOWN, UP, FORWARD
