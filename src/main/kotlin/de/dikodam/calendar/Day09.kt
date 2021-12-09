@@ -16,10 +16,10 @@ class Day09 : AbstractDay() {
     val input: Map<Coordinates2D, Int> = readInputStrings()
         /*
         val input: Map<Coordinates2D, Int> = """2199943210
-    3987894921
-    9856789892
-    8767896789
-    9899965678""".lines()
+3987894921
+9856789892
+8767896789
+9899965678""".trim().lines()
     */
         .flatMapIndexed { y, line ->
             line.asSequence()
@@ -71,7 +71,7 @@ class Day09 : AbstractDay() {
             visitedPoints += point
             if (input[point] == 9) continue
             val currentBasin = mutableSetOf<Coordinates2D>()
-
+            currentBasin += point
             val stack = ArrayDeque<Coordinates2D>()
             stack += getNeighborsCoords(point, input)
 
@@ -89,7 +89,6 @@ class Day09 : AbstractDay() {
         val result = basins.map { it.size }
             .sortedDescending()
             .take(3)
-            .map { it + 1 }
             .reduce(Int::times)
         return "$result"
     }

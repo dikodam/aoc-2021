@@ -21,6 +21,7 @@ class Day07 : AbstractDay() {
             .toString()
     }
 
+    // TODO is this or task 1 avg?
     override fun task2(): String {
         return (min..max)
             .map { m ->
