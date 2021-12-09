@@ -14,13 +14,13 @@ fun main() {
 class Day09 : AbstractDay() {
 
     val input: Map<Coordinates2D, Int> = readInputStrings()
-    /*
-    val input: Map<Coordinates2D, Int> = """2199943210
-3987894921
-9856789892
-8767896789
-9899965678""".lines()
-*/
+        /*
+        val input: Map<Coordinates2D, Int> = """2199943210
+    3987894921
+    9856789892
+    8767896789
+    9899965678""".lines()
+    */
         .flatMapIndexed { y, line ->
             line.asSequence()
                 .mapIndexed { x, i -> Coordinates2D(x, y) to i.digitToInt() }
@@ -54,7 +54,7 @@ class Day09 : AbstractDay() {
     }
 
     override fun task2(): String {
-        // bfs
+        // identify basins by breadth first search
         // for each point,
         //  if registered, skip
         //  if not registered, register
@@ -63,14 +63,13 @@ class Day09 : AbstractDay() {
         // filterNonRegistered Neighbors
         // register each != 9 as part current basin
         // flatMap each != 9 neighbor to its neighbors
-        // when done
 
         val basins = mutableListOf<Basin>()
         val visitedPoints = mutableSetOf<Coordinates2D>()
         for (point in input.keys) {
             if (point in visitedPoints) continue
             visitedPoints += point
-            if (input[point]!! == 9) continue
+            if (input[point] == 9) continue
             val currentBasin = mutableSetOf<Coordinates2D>()
 
             val stack = ArrayDeque<Coordinates2D>()
@@ -78,14 +77,9 @@ class Day09 : AbstractDay() {
 
             while (stack.isNotEmpty()) {
                 val currentPoint = stack.remove()
-                if (visitedPoints.contains(currentPoint)) {
-                    continue
-                } else {
-                    visitedPoints += currentPoint
-                }
-                if (input[currentPoint] == 9) {
-                    continue
-                }
+                if (currentPoint in visitedPoints) continue
+                visitedPoints += currentPoint
+                if (input[currentPoint] == 9) continue
                 currentBasin += currentPoint
                 stack += getNeighborsCoords(currentPoint, input)
             }
