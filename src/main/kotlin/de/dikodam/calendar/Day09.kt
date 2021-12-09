@@ -14,6 +14,13 @@ fun main() {
 class Day09 : AbstractDay() {
 
     val input: Map<Coordinates2D, Int> = readInputStrings()
+    /*
+    val input: Map<Coordinates2D, Int> = """2199943210
+3987894921
+9856789892
+8767896789
+9899965678""".lines()
+*/
         .flatMapIndexed { y, line ->
             line.asSequence()
                 .mapIndexed { x, i -> Coordinates2D(x, y) to i.digitToInt() }
@@ -88,6 +95,7 @@ class Day09 : AbstractDay() {
         val result = basins.map { it.size }
             .sortedDescending()
             .take(3)
+            .map { it + 1 }
             .reduce(Int::times)
         return "$result"
     }
