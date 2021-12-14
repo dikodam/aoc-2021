@@ -13,25 +13,25 @@ fun main() {
 class Day14 : AbstractDay() {
 
     val inputLines =
-//        readInputStrings()
-        """NNCB
-
-CH -> B
-HH -> N
-CB -> H
-NH -> C
-HB -> C
-HC -> B
-HN -> C
-NN -> C
-BH -> H
-NC -> B
-NB -> B
-BN -> B
-BB -> N
-BC -> B
-CC -> N
-CN -> C""".trim().lines()
+        readInputStrings()
+//        """NNCB
+//
+//CH -> B
+//HH -> N
+//CB -> H
+//NH -> C
+//HB -> C
+//HC -> B
+//HN -> C
+//NN -> C
+//BH -> H
+//NC -> B
+//NB -> B
+//BN -> B
+//BB -> N
+//BC -> B
+//CC -> N
+//CN -> C""".trim().lines()
 
     val initialState = inputLines[0]
     val mappings: Map<String, Char> = inputLines
@@ -58,42 +58,36 @@ CN -> C""".trim().lines()
 
 
     override fun task2(): String {
-        var polymer = initialState
-
-        var pairCounts: Map<String, Long> = polymer.windowed(2)
-            .associateWith { 0L }
-            .toMutableMap()
-
+        val polymer = initialState
+        var polymerStore = polymer.windowed(2)
+            .associateWith { 1L }
         repeat(40) {
-            pairCounts = pairCounts.expandPolymers(mappings)
+            polymerStore = polymerStore.expandPolymers()
         }
-
-        val charCount = pairCounts.asSequence()
-            .flatMap { (chars, count) ->
-                generateSequence { chars[0] }
-                    .take(count) +
-                        generateSequence { chars[1] }
-                            .take(count)
-            }
-            .groupingBy { it }
-            .eachCount()
-
-
-        return "x"
+        val charCounts = polymerStore.countChars()
+            .also { map -> map.merge(polymer.last(), 1L, Long::plus) }
+        val maxCount = charCounts.values.maxOf { it }
+        val minCount = charCounts.values.minOf { it }
+        return "${maxCount - minCount}"
     }
 
-    fun Map<String, Char>.expandFromKey(key: String): List<String> {
-        return if (key !in this.keys) {
-            listOf(key)
-        } else {
-            val char = this[key]
-            listOf("${key[0]}$char", "$char${key[1]}")
+    fun Map<String, Long>.expandPolymers(): Map<String, Long> {
+        val result: MutableMap<String, Long> = mutableMapOf()
+        for ((str, count) in this) {
+            val midChar = mappings[str]!!
+            result.merge("${str[0]}$midChar", count, Long::plus)
+            result.merge("$midChar${str[1]}", count, Long::plus)
         }
+        return result
     }
 
-    fun Map<String, Int>.expandPolymers(mapping: Map<String, Char>): Map<String, Int> {
-        return this.flatMap { (polymerKey, _) -> mapping.expandFromKey(polymerKey) }
-            .groupBy { it }
-            .mapValues { (_, expansionList) -> expansionList.size }
+    fun Map<String, Long>.countChars(): MutableMap<Char, Long> {
+        val result: MutableMap<Char, Long> = mutableMapOf()
+        for ((str, count) in this) {
+            val char1 = str[0]
+            result.merge(char1, count, Long::plus)
+        }
+        return result
     }
+
 }
