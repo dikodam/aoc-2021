@@ -5,7 +5,7 @@ import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
 @ExperimentalTime
-fun <DAY : AbstractDay> DAY.executeTasks() {
+fun AbstractDay.executeTasks() {
     val day = this::class.simpleName
 
     val (result1, duration1) = measureTimedValue { this.task1() }

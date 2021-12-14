@@ -76,13 +76,13 @@ class Day13 : AbstractDay() {
 
         val sb = StringBuilder()
 
-        for (x in 0..maxX) {
             for (y in 0..maxY) {
+        for (x in 0..maxX) {
                 if (Coordinates2D(x, y) in finalPoints) {
 //                    print('X')
-                    sb.append('X')
+                    sb.append("# ")
                 } else {
-                    sb.append(' ')
+                    sb.append("  ")
                 }
             }
             sb.append("\n")
