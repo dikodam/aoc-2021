@@ -51,10 +51,10 @@ pj-fs
 start-RW""".trim().lines()
 
     val adjacencyList: List<Pair<String, String>> =
-        testInput1 // 54 is wrong, should be 36
-//        testInput2 // 247 is wrong, should be 103
-//        testInput3 // 212945 is wrong, should be 3509
-//        readInputStrings()
+//        testInput1 // 36 check
+//        testInput2 //  103 check
+//        testInput3 //  3509
+        readInputStrings()
             .buildAdjacencyList()
 
 
@@ -82,7 +82,7 @@ start-RW""".trim().lines()
             return listOf(currentPath)
         }
 
-        val children = adjacencyList.getChildren(currentNode)
+        val children = adjacencyList.getNeighbors(currentNode)
             .filterNot { it in visited }
 
         return if (children.isEmpty()) {
@@ -93,51 +93,47 @@ start-RW""".trim().lines()
         }
     }
 
-    fun List<Pair<String, String>>.getChildren(parent: String): List<String> {
+    fun List<Pair<String, String>>.getNeighbors(parent: String): List<String> {
         return this.filter { (parentNode, _) -> parent == parentNode }
             .map { it.second }
     }
 
+
     override fun task2(): String {
         val paths = dfs2(
-            start,
-            adjacencyList,
             currentPath = listOf(start),
-            visited = mapOf(start to 1)
+            adjacencyList
         )
+
         return "${paths.size}"
     }
 
-    fun dfs2(
-        currentNode: String,
-        adjacencyList: List<Pair<String, String>>,
-        currentPath: List<String>,
-        visited: Map<String, Int>
-    ): List<List<String>> {
+    fun dfs2(currentPath: List<String>, adjacencyList: List<Pair<String, String>>): List<List<String>> {
+        val currentNode = currentPath.last()
         if (currentNode == end) {
             return listOf(currentPath)
         }
-        var children = adjacencyList.getChildren(currentNode)
-            .filterNot { it == start }
 
-        val hasSmallCaveBeenVisited = visited.values.contains(2)
-        if (hasSmallCaveBeenVisited) {
-            children = children.filterNot { it.isSmallCave() }
+        val wasSmallCaveVisitedTwice = currentPath
+            .filterNot { it == start }
+            .filter { it.isSmallCave() }
+            .groupingBy { it }
+            .eachCount()
+            .any { (_, count) -> count == 2 }
+
+        val nonVisitableCaves = if (wasSmallCaveVisitedTwice) {
+            currentPath.filter { it.isSmallCave() }
+        } else {
+            listOf(start)
         }
-        return if (children.isEmpty()) {
+
+        val neighbors = adjacencyList.getNeighbors(currentNode)
+            .filterNot { it in nonVisitableCaves }
+
+        return if (neighbors.isEmpty()) {
             emptyList()
         } else {
-            val newVisited = visited.computeNewVisted(currentNode)
-            children.flatMap { child -> dfs2(child, adjacencyList, currentPath + child, newVisited) }
-        }
-    }
-
-    fun Map<String, Int>.computeNewVisted(currentNode: String): Map<String, Int> {
-        return if (!currentNode.isSmallCave() || currentNode == start) {
-            this
-        } else {
-            this.map { (key, value) -> if (key == currentNode) key to value + 1 else key to value }
-                .toMap()
+            neighbors.flatMap { child -> dfs2(currentPath + child, adjacencyList) }
         }
     }
 
