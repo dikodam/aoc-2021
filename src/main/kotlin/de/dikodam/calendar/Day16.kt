@@ -61,11 +61,12 @@ fun parseNextPacket(input: String): Pair<Packet, String> {
     val typeId = input.drop(3).take(3).toInt(2)
     val payload = input.drop(6)
 
-    val (packet: Packet, remainingPayload) = if (typeId == 4) {
-        parseLiteralValue(version, payload)
-    } else {
-        parseOperator(version, typeId, payload)
-    }
+    val (packet: Packet, remainingPayload: String) =
+        if (typeId == 4) {
+            parseLiteralValue(version, payload)
+        } else {
+            parseOperator(version, typeId, payload)
+        }
 
     return packet to remainingPayload
 }
@@ -75,13 +76,11 @@ fun parseLiteralValue(version: Int, payload: String): Pair<LiteralValue, String>
     var morePartsToParse = true
     var binaryNumber = ""
     while (morePartsToParse) {
-        val numberPart = remainingString.take(5)
-        val (keepGoing, numberDigits) = numberPart.splitAfter(1)
-        binaryNumber += numberDigits
+        val (keepGoing, numberDigits) = remainingString.take(5).splitAfter(1)
         morePartsToParse = keepGoing == "1"
+        binaryNumber += numberDigits
         remainingString = remainingString.drop(5)
     }
-
     val number = binaryNumber.toLong(2)
     return LiteralValue(version, number) to remainingString
 }
