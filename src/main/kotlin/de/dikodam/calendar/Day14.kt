@@ -13,7 +13,7 @@ fun main() {
 class Day14 : AbstractDay() {
 
     val inputLines =
-        readInputStrings()
+        readInputLines()
 //        """NNCB
 //
 //CH -> B

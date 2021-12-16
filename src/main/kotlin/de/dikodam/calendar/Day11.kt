@@ -3,7 +3,6 @@ package de.dikodam.calendar
 import de.dikodam.AbstractDay
 import de.dikodam.Coordinates2D
 import de.dikodam.executeTasks
-import java.util.*
 import kotlin.collections.ArrayDeque
 import kotlin.time.ExperimentalTime
 
@@ -13,7 +12,7 @@ fun main() {
 }
 
 class Day11 : AbstractDay() {
-    val input: Map<Coordinates2D, Octo> = readInputStrings().map { line -> line.map { it.digitToInt() } }
+    val input: Map<Coordinates2D, Octo> = readInputLines().map { line -> line.map { it.digitToInt() } }
         .flatMapIndexed { y, intLine -> intLine.mapIndexed { x, energy -> Coordinates2D(x, y) to Octo(energy) } }
         .toMap()
 

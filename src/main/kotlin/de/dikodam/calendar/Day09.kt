@@ -13,7 +13,7 @@ fun main() {
 
 class Day09 : AbstractDay() {
 
-    val input: Map<Coordinates2D, Int> = readInputStrings()
+    val input: Map<Coordinates2D, Int> = readInputLines()
         /*
         val input: Map<Coordinates2D, Int> = """2199943210
 3987894921

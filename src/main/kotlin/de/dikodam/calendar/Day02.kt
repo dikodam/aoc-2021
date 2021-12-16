@@ -12,7 +12,7 @@ fun main() {
 }
 
 class Day02 : AbstractDay() {
-    val input = readInputStrings()
+    val input = readInputLines()
     override fun task1(): String {
         return input.map { parseInstructionTask1(it) }
             .fold(Coordinates2D(0, 0), Coordinates2D::plus)

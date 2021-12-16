@@ -11,7 +11,7 @@ fun main() {
 
 class Day05 : AbstractDay() {
 
-        val input = readInputStrings()
+        val input = readInputLines()
 //    val input = """0,9 -> 5,9
 //8,0 -> 0,8
 //9,4 -> 3,4

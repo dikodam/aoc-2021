@@ -12,7 +12,7 @@ fun main() {
 
 class Day10 : AbstractDay() {
 
-    val input = readInputStrings()
+    val input = readInputLines()
 //    val input = """[({(<(())[]>[[{[]{<()<>>
 //[(()[<>])]({[<{<<[]>>(
 //{([(<{}[<>[]}>{[]{[(<()>

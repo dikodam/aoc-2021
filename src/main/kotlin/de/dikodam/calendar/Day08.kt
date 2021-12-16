@@ -1,8 +1,6 @@
 package de.dikodam.calendar
 
 import de.dikodam.AbstractDay
-import de.dikodam.executeTasks
-import java.util.NoSuchElementException
 import kotlin.time.ExperimentalTime
 
 @ExperimentalTime
@@ -15,7 +13,7 @@ fun main() {
 }
 
 class Day08 : AbstractDay() {
-    val input = readInputStrings()
+    val input = readInputLines()
 
 //    val input = """be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
 //edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc

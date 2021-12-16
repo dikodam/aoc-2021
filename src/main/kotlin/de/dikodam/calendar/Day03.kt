@@ -12,7 +12,7 @@ fun main() {
 
 class Day03 : AbstractDay() {
 
-    val input = readInputStrings()
+    val input = readInputLines()
 
     override fun task1(): String {
         val length = input[0].length

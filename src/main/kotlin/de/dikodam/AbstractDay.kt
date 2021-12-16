@@ -29,12 +29,12 @@ abstract class AbstractDay {
         return findDayFile().readText()
     }
 
-    fun readInputStrings(): List<String> {
+    fun readInputLines(): List<String> {
         return findDayFile().readLines()
     }
 
     fun readInputInts(): List<Int> {
-        return readInputStrings()
+        return readInputLines()
             .map { it.toInt() }
     }
 }

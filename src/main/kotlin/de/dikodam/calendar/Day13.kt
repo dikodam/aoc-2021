@@ -16,7 +16,7 @@ data class FoldingInstruction(val scale: Char, val position: Int)
 class Day13 : AbstractDay() {
 
     val pointsAndFoldingInstructions: Pair<List<Coordinates2D>, List<FoldingInstruction>> =
-        parseInput(readInputStrings())
+        parseInput(readInputLines())
 
     fun parseInput(rawInputLines: List<String>): Pair<List<Coordinates2D>, List<FoldingInstruction>> {
         val points: List<Coordinates2D> = rawInputLines

@@ -54,7 +54,7 @@ start-RW""".trim().lines()
 //        testInput1 // 36 check
 //        testInput2 //  103 check
 //        testInput3 //  3509
-        readInputStrings()
+        readInputLines()
             .buildAdjacencyList()
 
 
