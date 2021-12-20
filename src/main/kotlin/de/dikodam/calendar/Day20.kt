@@ -21,8 +21,8 @@ val test1 =
 
 class Day20 : AbstractDay() {
 
-        val rawInputLines = readInputLines()
-//    val rawInputLines = test1
+    //val rawInputLines = readInputLines()
+    val rawInputLines = test1
     val enhancementAlgo = rawInputLines[0]
     val inputPicture = rawInputLines.drop(2)
 
@@ -34,11 +34,11 @@ class Day20 : AbstractDay() {
                 .map { (coords) -> coords }
                 .toSet()
 
-//        visualize(picture)
+        visualize(picture)
 
         repeat(2) {
             picture = extendImage(picture)
-//            visualize(picture)
+            visualize(picture)
         }
 
         return picture.size.toString()
@@ -85,10 +85,12 @@ class Day20 : AbstractDay() {
         val xs = (x - 1)..(x + 1)
         val ys = (y - 1)..(y + 1)
         var index = ""
-        xs.flatMap { newX -> ys.map { newY -> newX to newY } }
+        val points = xs.flatMap { newX -> ys.map { newY -> newX to newY } }
             .map { (newX, newY) -> Coordinates2D(newX, newY) }
-            .map { if (it in picture) "1" else "0" }
-            .forEach { index = it + index }
+        for (point in points) {
+            val activation = if (point in picture) "1" else "0"
+            index = activation + index
+        }
         return index
             .toInt(2)
     }
